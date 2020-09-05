@@ -7,7 +7,6 @@ export const store = new Vuex.Store({
     state: {
         foods: [],
         userfoods: [],
-        type: 'fruites',
         temp: ''
     },
     getters: {
@@ -19,22 +18,7 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
-        getallfoods: (state, foods)=> {
-            console.log('before axios mutations')
-            axios.post('api')
-                // .then(response => console.log(response, 'response from store.js mutations'))
-                .then(response => state.chats = response.data)
-                .catch(error => console.log(error, 'Gowtham'))
-            console.log('after axios mutations')
-        },
-        getuserfoods: (state, userfoods)=> {
-            console.log('before axios mutations')
-            axios.post('api')
-                // .then(response => console.log(response, 'response from store.js mutations'))
-                .then(response => state.chats = response.data)
-                .catch(error => console.log(error, 'Gowtham'))
-            console.log('after axios mutations')
-        }
+        // 
     },
     actions: {
         async loadFoods(context , state ) {
@@ -46,63 +30,39 @@ export const store = new Vuex.Store({
             // console.log(this.foods);
             return this.foods;
         },
-        // async addToCart(context , item  ) {
-        //     console.log('incrementing '+ item.item );
-        //     var url = "http://127.0.0.1:8000/food-api/inc/"+item.item;
-        //     var temp = await axios.put(url)
-        //         .then(resp => {
-        //             console.log(resp.data);
-        //             return resp.data;
-        //         })
-        //         .catch(error => console.log(error, 'Gowtham'));
+        async loadtempFoods(context ) {
 
-        //     console.log('temp is ' , temp);
-        //     return context.dispatch('loadFoods');
-        // },
-        // async delFromCart(context, item ) {
-        //     console.log('decrementing '+item.item);
-        //     var url = "http://127.0.0.1:8000/food-api/dec/"+item.item;
-        //     var temp = await axios.put(url)
-        //         .then(resp => {
-        //             // console.log(resp.data);
-        //             return resp.data;
-        //         })
-        //         .catch(error => console.log(error, 'Gowtham'));
-            
-        //     return context.dispatch('loadFoods');
-        // },
-        async loaduserFoods(context , state ) {
-            this.userfoods = await axios.get('http://127.0.0.1:8000/food-user-api')
+            var url = `http://127.0.0.1:8000/food-load-item/`;
+            var temp = await axios.get(url)
                 .then(resp => {
                     // console.log(resp.data);
                     return resp.data;
+                })
+                .catch(error => console.log(error, 'Gowtham'));
+
+            this.userfoods = temp;
+            // console.log('temp is ' , temp, this.userfoods);
+
+            return temp;
+        },
+        async buy(context) {
+            console.log('incrementing '+ this.userfoods );
+            var url = `http://127.0.0.1:8000/food-buy/`;
+            var temp = await axios.post(url, {
+                    userfoods: this.userfoods
+                })
+                .then(resp => {
+                    // console.log(resp.data);
+                    return resp.data;
+                })
+                .catch( function(error) {
+                    console.log(error.response.status, 'Login to purchase');
+                    if(error.response.status == 401){
+                        window.location.href = "http://127.0.0.1:8000/login";
+                    }
                 });
-            // console.log(this.foods);
-            return this.userfoods;
-        },
-        async adduserToCart(context , item  ) {
-            console.log('incrementing '+ item.item );
-            var url = `http://127.0.0.1:8000/food-user-api/inc/${item.item}`;
-            var temp = await axios.put(url)
-                .then(resp => {
-                    // console.log(resp.data);
-                    return resp.data;
-                })
-                .catch(error => console.log(error, 'Gowtham'));
-            // console.log('temp is ' , temp);
-            return context.dispatch('loaduserFoods');
-        },
-        async deluserFromCart(context, item ) {
-            console.log('decrementing '+item.item);
-            var url = `http://127.0.0.1:8000/food-user-api/dec/${item.item}`;
-            var temp = await axios.put(url)
-                .then(resp => {
-                    // console.log(resp.data);
-                    return resp.data;
-                })
-                .catch(error => console.log(error, 'Gowtham'));
-            // console.log('temp is ' , temp);
-            return context.dispatch('loaduserFoods');
+
+            return temp;
         }
     }
 });

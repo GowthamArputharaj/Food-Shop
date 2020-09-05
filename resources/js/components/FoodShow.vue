@@ -1,8 +1,9 @@
 <template>
-    <div>
+    <div class="row w-75 mx-auto ">
+        
         <h3> Food Item List</h3>
 
-        <table class="table table-striped table-hover col-sm-12 col-6">
+        <table class="table table-striped table-hover col-12 ">
             <thead>
             <tr>
                 <th>Food name</th>
@@ -27,7 +28,7 @@
 
 
         <h3> Food in Cart List</h3>
-        <table class="table table-striped table-hover col-sm-12 col-6">
+        <table class="table table-striped table-hover col-12 ">
             <thead>
             <tr>
                 <th>Food name</th>
@@ -60,7 +61,9 @@
         created: async function() {
             this.foods = await this.$store.dispatch('loadFoods');
 
-            console.log(this.foods, typeof this.foods, this.foods[0][1]);
+            this.userfoods = await this.$store.dispatch('loaduserFoods');
+
+            // console.log(this.foods, typeof this.foods, this.foods[0][1]);
         },
         methods: {
             async add_to_cart($item) {
@@ -73,6 +76,7 @@
 
                 this.userfoods = await this.$store.dispatch('loaduserFoods');
             }
+            
         }
     }
 </script>

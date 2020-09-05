@@ -25,9 +25,10 @@ Vue.component('food-show', require('./components/FoodShow.vue').default);
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 import FoodShow from './components/FoodShow.vue';
+import FoodSecond from './components/FoodSecond.vue';
+import SellFood from './components/SellFood.vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
-
 import { store } from './store/index.js';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,12 +39,15 @@ import { store } from './store/index.js';
 const app = new Vue({
     el: '#app',
     store,
-    components: {
-        'food-show': FoodShow
+    data: {
+        userfoods: []
     },
-    
+    components: {
+        'food-show': FoodShow,
+        'food-second': FoodSecond,
+        'sell-food': SellFood,
+    }
 });
-
 
 // import Products from './components/Products.vue';
 
